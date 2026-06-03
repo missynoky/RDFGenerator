@@ -14,7 +14,7 @@ def parse_arguments():
     )
 
     parser.add_argument(
-        "-sf", "--statements",
+        "-st", "--statements",
         type=int,
         required=True,
         help="Number of base statements to generate."
