@@ -6,8 +6,6 @@ from .enums import ReifierType
 
 
 def initialize_environment():
-    print("Initializing RDF Graph.")
-
     fake = Faker()
     graph = Dataset()
     EX = Namespace("http://example.org/data/")
