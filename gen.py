@@ -4,7 +4,7 @@ from generator.core import initialize_environment, generate_rdf_data
 
 def main():
     args = parse_arguments()
-    graph, fake, EX = initialize_environment()
+    graph, fake, EX = initialize_environment(seed=args.seed)
     graph = generate_rdf_data(args, graph, fake, EX)
 
     print("Data generated in memory.")

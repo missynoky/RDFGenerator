@@ -36,4 +36,11 @@ def parse_arguments():
         help="Type of the reifier node."
     )
 
+    parser.add_argument(
+        "-s", "--seed",
+        type=int,
+        default=None,
+        help="Random seed."
+    )
+
     return parser.parse_args()

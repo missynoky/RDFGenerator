@@ -1,13 +1,19 @@
 import random
-import uuid
 from rdflib import Dataset, Namespace, Literal, BNode
 from rdflib.namespace import RDF, RDFS, DCTERMS, FOAF, XSD
 from faker import Faker
 from .enums import ReifierType
 
 
-def initialize_environment():
+def initialize_environment(seed=None):
+    if seed is not None:
+        random.seed(seed)
+        Faker.seed(seed)
+
     fake = Faker()
+    if seed is not None:
+        fake.seed_instance(seed)
+
     graph = Dataset()
     EX = Namespace("http://example.org/data/")
 
@@ -33,6 +39,8 @@ def generate_rdf_data(args, graph, fake, EX):
 
     base_triples_pool = []
 
+    chars = '0123456789abcdef'
+
     for _ in range(args.statements):
         if base_triples_pool and random.random() < 0.30:
             person_a_uri, predicate, person_b_uri, slug_a, slug_b = random.choice(base_triples_pool)
@@ -40,8 +48,8 @@ def generate_rdf_data(args, graph, fake, EX):
             name_a = fake.name()
             name_b = fake.name()
 
-            slug_a = name_a.lower().replace(" ", "_") + f"_{uuid.uuid4().hex[:4]}"
-            slug_b = name_b.lower().replace(" ", "_") + f"_{uuid.uuid4().hex[:4]}"
+            slug_a = name_a.lower().replace(" ", "_") + f"_{''.join(random.choices(chars, k=4))}"
+            slug_b = name_b.lower().replace(" ", "_") + f"_{''.join(random.choices(chars, k=4))}"
 
             person_a_uri = EX[slug_a]
             person_b_uri = EX[slug_b]
@@ -62,7 +70,7 @@ def generate_rdf_data(args, graph, fake, EX):
         if args.reifier_type == ReifierType.BNODE.value:
             reifier = BNode()
         else:
-            unique_id = uuid.uuid4().hex[:8]
+            unique_id = ''.join(random.choices(chars, k=8))
             statement_slug = f"stmt_{slug_a}_{slug_b}_{unique_id}"
             reifier = EX[statement_slug]
 
@@ -98,7 +106,7 @@ def generate_rdf_data(args, graph, fake, EX):
             if args.reifier_type == ReifierType.BNODE.value:
                 nested_reifier = BNode()
             else:
-                nested_id = uuid.uuid4().hex[:8]
+                nested_id = ''.join(random.choices(chars, k=8))
                 nested_slug = f"nested_stmt_{nested_id}"
                 nested_reifier = EX[nested_slug]
 
