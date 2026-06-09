@@ -1,3 +1,4 @@
+import sys
 import random
 from rdflib import Dataset, Namespace, Literal, BNode
 from rdflib.namespace import RDF, RDFS, DCTERMS, FOAF, XSD
@@ -28,7 +29,7 @@ def initialize_environment(seed=None):
 
 
 def generate_rdf_data(args, graph, fake, EX):
-    print(f"Generating {args.statements} statements.")
+    print(f"Generating {args.statements} statements.", file=sys.stderr)
 
     possible_predicates = [
         FOAF.knows,
